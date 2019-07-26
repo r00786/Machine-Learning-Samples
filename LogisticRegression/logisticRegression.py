@@ -11,6 +11,7 @@ import sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
 
 
 df = pd.read_csv('iris-data.csv')
@@ -30,6 +31,7 @@ out_df = final_df.drop(final_df.columns[[0,1,2,3]], axis=1)
 
 scaler =StandardScaler()
 inp_df = scaler.fit_transform(inp_df)
+
 
 X_train, X_test, y_train, y_test = train_test_split(inp_df, out_df, test_size=0.2, random_state=42)
 
@@ -54,10 +56,8 @@ def weight_initialization(n_features):
 def model_optimize(w,b,X,Y):
     m=X.shape[0]
     result=sigmoid_calculation(np.dot(w,X.T)+b)
-    Y_T=Y.T
-    
-    cost=(-1/m)*(np.sum((Y_T*np.log(result))+((1-Y_T)*np.log(1-result))))
-    
+    Y_T=Y.T    
+    cost=(-1/m)*(np.sum((Y_T*np.log(result))+((1-Y_T)*np.log(1-result))))    
     dw=(1/m)*(np.dot(X.T,(result-Y.T).T))
     db=(1/m)*np.sum(result-Y.T)
     
@@ -69,12 +69,21 @@ def model_predict(w,b,X,Y,learning_rate,no_of_iterations):
         dw,db,cost=model_optimize(w,b,X,Y)
         w=w-(learning_rate*(dw.T))
         b=b-(learning_rate*db)
-    return w,b,costs        
+        costs=cost
+    return w,b,costs      
+
+def indic(data):
+    #alternatively you can calulate any other indicators
+    max = np.max(data, axis=1)
+    min = np.min(data, axis=1)
+    return max, min  
 
 w,b=weight_initialization(X_tr_arr.shape[1])
 
 w,b,cost=model_predict(w,b,X_tr_arr,y_tr_arr,learning_rate=0.0001,no_of_iterations=4500)
-
+ 
+print(sigmoid_calculation(np.dot(w,X_ts_arr.T)+b))
+print(y_ts_arr)
 
 
         

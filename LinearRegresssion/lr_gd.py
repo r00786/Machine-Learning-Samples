@@ -54,8 +54,7 @@ def run():
     y=(m*x)+b
     plt.plot(x,y,color='red')
     plt.show()
-    print((m*120)+b)
-    
+   
 
 
 
